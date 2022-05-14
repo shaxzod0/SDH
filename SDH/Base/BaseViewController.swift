@@ -17,7 +17,13 @@ class BaseViewController: UIViewController {
     var loadingText: String?
     
    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
     
     
@@ -32,8 +38,10 @@ class BaseViewController: UIViewController {
         reachability?.whenReachable = { reach in
             if reach.connection == .wifi {
                 self.noConnection = false
+                self.isLoading = true
             } else {
                 self.noConnection = false
+                self.isLoading = true
             }
         }
         reachability?.whenUnreachable = { _ in

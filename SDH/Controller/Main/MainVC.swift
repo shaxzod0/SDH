@@ -16,7 +16,7 @@ class MainVC: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initViews()
-        isLoading = viewModel.isProductsEmpty()
+        isLoading = !viewModel.isProductsEmpty()
     }
     @objc override func retry() {
         self.isLoading = true
@@ -38,8 +38,9 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, 
             make.left.equalToSuperview().offset(15)
         }
         searchButton.setTitle("Search", for: .normal)
+        searchButton.addTarget(self, action: #selector(searchMedicine), for: .touchUpInside)
         searchButton.snp.makeConstraints { make in
-            make.left.equalTo(searchTF.snp.right).offset(10)
+            make.right.equalToSuperview().inset(20)
             make.centerY.equalTo(searchTF.snp.centerY)
         }
         let medicinesLayout = UICollectionViewFlowLayout()
@@ -56,6 +57,18 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, 
             make.left.right.bottom.equalToSuperview()
         }
         self.collectionView = collectionView
+        viewModel.reloadCollectionViewClosure = { [weak self] () in
+            DispatchQueue.main.async {
+                self?.collectionView?.reloadData()
+            }
+        }
+    }
+    @objc func searchMedicine() {
+        guard let name = searchTF.text else{ return }
+        viewModel.searchedItems(medicineName: name)
+        if viewModel.getItemsCount() == 0 {
+            medicineNotFound()
+        }
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.getItemsCount()
@@ -63,15 +76,31 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MedicinesCell.reuseIdentifier, for: indexPath) as! MedicinesCell
-        viewModel.getItems()
-        cell.updateUI(with: viewModel.results[indexPath.item])
+        cell.updateUI(with: viewModel.getProduct(index: indexPath.item))
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.width
-        return CGSize(width: width, height: 200)
+        let width = collectionView.frame.width - 40
+        return CGSize(width: width, height: 100)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = InfoModule.create(medicineId: viewModel.getProduct(index: indexPath.item).id)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.item == viewModel.getItemsCount() - 1{
+            viewModel.pageCount += 1
+            viewModel.getItems()
+        }else{
+            
+        }
+    }
+    func medicineNotFound(){
+        let alert = UIAlertController(title: "Medicine not found", message: "Sorry we can't find", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        present(alert, animated: true)
     }
 }

@@ -20,8 +20,8 @@ class DataManager {
         let entity = NSEntityDescription.entity(forEntityName: "Fav", in: context)
         let favObject = NSManagedObject(entity: entity!, insertInto: context)
         favObject.setValue(product.id, forKey: "id")
-        favObject.setValue(product.trade_label.name, forKey: "tradeLabel")
-        favObject.setValue(product.composition, forKey: "manufacturer")
+        favObject.setValue(product.trade_label?.name, forKey: "tradeLabel")
+        favObject.setValue(product.manufacturer?.name, forKey: "manufacturer")
         do{
             try context.save()
             compilation(.success(true))
@@ -57,18 +57,18 @@ class DataManager {
             print(error)
         }
     }
-    func deleteRecords(product: Results,complation: @escaping (Result<Bool, Error>)->Void){
+    func deleteRecords(product: Int,complation: @escaping (Result<Bool, Error>)->Void){
         guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
             complation(.failure(NSError(domain: "Appdelegate not found", code: 404, userInfo: nil)))
             return
         }
         let ctx = delegate.persistentContainer.viewContext
-        let requestDel = NSFetchRequest<NSFetchRequestResult>(entityName: "Cart")
+        let requestDel = NSFetchRequest<NSFetchRequestResult>(entityName: "Fav")
         requestDel.returnsObjectsAsFaults = false
         do {
             let arrUsrObj = try ctx.fetch(requestDel)
             for usrObj in arrUsrObj as! [NSManagedObject] {
-                if usrObj.value(forKey: "id") as! Int == product.id {
+                if usrObj.value(forKey: "id") as! Int == product {
                         ctx.delete(usrObj) // Deleting Object
                 }
             }
@@ -81,12 +81,12 @@ class DataManager {
             print("Failed saving")
         }
     }
-    func checkIfItemExist(id: Int) -> Bool {
+    func checkItemExist(id: Int) -> Bool {
         guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
             return false
         }
         let managedContext = delegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Cart")
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Fav")
         fetchRequest.fetchLimit =  1
         fetchRequest.predicate = NSPredicate(format: "id == %d" ,id)
         do {

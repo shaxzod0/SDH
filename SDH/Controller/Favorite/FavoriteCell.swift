@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FavoriteCell: BaseTableViewCell<Results> {
+class FavoriteCell: BaseTableViewCell<CoreDataModel> {
     let tradeLabel = UILabel()
     let manufacturerLabel = UILabel()
     
@@ -27,8 +27,8 @@ class FavoriteCell: BaseTableViewCell<Results> {
             make.left.right.equalToSuperview().inset(20)
         }
     }
-    override func updateUI(with model: Results) {
-        manufacturerLabel.text = model.composition.description
-        tradeLabel.text = model.trade_label.name
+    override func updateUI(with model: CoreDataModel) {
+        manufacturerLabel.text = model.manafacturer
+        tradeLabel.text = model.tradeLabel
     }
 }

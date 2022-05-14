@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		69B6558F78FE5992D6EC93DE /* Pods_SDH.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA70E79C7B92A11469A726F8 /* Pods_SDH.framework */; };
+		79B3BDF0282E8EEE0029994C /* InfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B3BDEF282E8EEE0029994C /* InfoViewModel.swift */; };
+		79B3BDF2282E8F620029994C /* InformationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B3BDF1282E8F620029994C /* InformationRepository.swift */; };
+		79B3BDF6282EE30D0029994C /* SearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B3BDF5282EE30C0029994C /* SearchRepository.swift */; };
+		79B3BDF8282F85490029994C /* InfoModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B3BDF7282F85490029994C /* InfoModule.swift */; };
 		79C699B1282D1982007C3597 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C699B0282D1982007C3597 /* AppDelegate.swift */; };
 		79C699B3282D1982007C3597 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C699B2282D1982007C3597 /* SceneDelegate.swift */; };
 		79C699B8282D1982007C3597 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79C699B6282D1982007C3597 /* Main.storyboard */; };
@@ -35,6 +39,10 @@
 
 /* Begin PBXFileReference section */
 		293075E4EC307D1904BB99DA /* Pods-SDH.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SDH.release.xcconfig"; path = "Target Support Files/Pods-SDH/Pods-SDH.release.xcconfig"; sourceTree = "<group>"; };
+		79B3BDEF282E8EEE0029994C /* InfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewModel.swift; sourceTree = "<group>"; };
+		79B3BDF1282E8F620029994C /* InformationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationRepository.swift; sourceTree = "<group>"; };
+		79B3BDF5282EE30C0029994C /* SearchRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepository.swift; sourceTree = "<group>"; };
+		79B3BDF7282F85490029994C /* InfoModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoModule.swift; sourceTree = "<group>"; };
 		79C699AD282D1982007C3597 /* SDH.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SDH.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		79C699B0282D1982007C3597 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		79C699B2282D1982007C3597 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -145,7 +153,9 @@
 			isa = PBXGroup;
 			children = (
 				79C699D5282D3038007C3597 /* Repository.swift */,
+				79B3BDF5282EE30C0029994C /* SearchRepository.swift */,
 				79C699D7282D304F007C3597 /* AppUrl.swift */,
+				79B3BDF1282E8F620029994C /* InformationRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -209,6 +219,8 @@
 			isa = PBXGroup;
 			children = (
 				79E3CAE5282D9053008147C5 /* InfoController.swift */,
+				79B3BDEF282E8EEE0029994C /* InfoViewModel.swift */,
+				79B3BDF7282F85490029994C /* InfoModule.swift */,
 			);
 			path = Information;
 			sourceTree = "<group>";
@@ -354,14 +366,18 @@
 				79C699D6282D3038007C3597 /* Repository.swift in Sources */,
 				79C699DF282D37BD007C3597 /* BaseCollectionViewCell.swift in Sources */,
 				79C699B1282D1982007C3597 /* AppDelegate.swift in Sources */,
+				79B3BDF6282EE30D0029994C /* SearchRepository.swift in Sources */,
 				79C699D4282D285C007C3597 /* MainVC.swift in Sources */,
 				79C699DA282D3196007C3597 /* MedicineModel.swift in Sources */,
+				79B3BDF0282E8EEE0029994C /* InfoViewModel.swift in Sources */,
+				79B3BDF8282F85490029994C /* InfoModule.swift in Sources */,
 				79C699B3282D1982007C3597 /* SceneDelegate.swift in Sources */,
 				79E3CADA282D8B48008147C5 /* FavoriteController.swift in Sources */,
 				79E3CAD4282D68F5008147C5 /* MedicinesCell.swift in Sources */,
 				79E3CAE3282D8F09008147C5 /* DataManager.swift in Sources */,
 				79E3CAD7282D8AD6008147C5 /* TabBarController.swift in Sources */,
 				79C699BB282D1982007C3597 /* SDH.xcdatamodeld in Sources */,
+				79B3BDF2282E8F620029994C /* InformationRepository.swift in Sources */,
 				79C699DC282D33B6007C3597 /* MainViewModel.swift in Sources */,
 				79E3CADE282D8C74008147C5 /* FavoriteCell.swift in Sources */,
 				79E3CAE6282D9053008147C5 /* InfoController.swift in Sources */,

@@ -8,9 +8,8 @@
 import UIKit
 import Alamofire
 
-class Repository {
+class Repository{
     static let shared = Repository()
-    
     func getMedicine(page: Int, compilationHandler: @escaping((MedicineModel)->Void)){
         let url = AppUrl()
         AF.request("\(url.baseUrl)?page=\(page)").responseDecodable(of: MedicineModel.self) { res in

@@ -15,6 +15,7 @@ class FavoriteController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
+        view.backgroundColor = .lightGray
         emptyLabel.isHidden = !viewModel.isProductsEmpty()
     }
 }
@@ -46,12 +47,16 @@ extension FavoriteController: UITableViewDelegate, UITableViewDataSource{
         }
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return viewModel.getProductCount()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: FavoriteCell.reuseIdentifier, for: indexPath) as! FavoriteCell
-//        cell.updateUI(with: viewModel.getProduct(index: indexPath.item))
+        cell.updateUI(with: viewModel.getProduct(index: indexPath.item))
         return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = InfoModule.create(medicineId: viewModel.getProduct(index: indexPath.item).id)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

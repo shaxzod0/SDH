@@ -5,10 +5,51 @@
 //  Created by Shaxzod Azamatjonov on 12/05/22.
 //
 
-import Foundation
+import UIKit
+import CoreData
 
+struct CoreDataModel{
+    let id: Int
+    let tradeLabel: String
+    let manafacturer: String
+}
 class FavoriteViewModel {
+    private var productData: [NSManagedObject] = []
+    init(){
+        fetchProducts()
+    }
+    func getProducts() -> [CoreDataModel] {
+        var products: [CoreDataModel] = []
+        for data in productData {
+            let id = data.value(forKey: "id") as! Int
+            let manufacturer = data.value(forKey: "manufacturer") as! String
+            let tradeLabel = data.value(forKey: "tradeLabel") as! String
+            products.append(CoreDataModel(id: id, tradeLabel: tradeLabel, manafacturer: manufacturer))
+        }
+        return products
+    }
+    
+    func getProductCount() -> Int {
+        return productData.count
+    }
+    func getProduct(index: Int) -> CoreDataModel {
+        let id = productData[index].value(forKey: "id") as! Int
+        let manufacturer = productData[index].value(forKey: "manufacturer") as! String
+        let tradeLabel = productData[index].value(forKey: "tradeLabel") as! String
+        let prodruct = CoreDataModel(id: id, tradeLabel: tradeLabel, manafacturer: manufacturer)
+        return prodruct
+    }
     func isProductsEmpty() -> Bool {
-        return true
+        return productData.isEmpty
+    }
+    func fetchProducts(){
+        DataManager.shared.fetchFav { res in
+            switch res{
+            case .success(let data):
+                self.productData = data
+            case .failure(let err):
+                print(err.localizedDescription)
+            }
+        }
     }
 }
