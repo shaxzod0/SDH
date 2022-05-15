@@ -45,18 +45,7 @@ class DataManager {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
     }
-    func deleteObject(object: Fav)->Void{
-        guard let delegate = UIApplication.shared.delegate as? AppDelegate else{
-            return
-        }
-        let context = delegate.persistentContainer.viewContext
-        do{
-            context.delete(object)
-            try context.save()
-        } catch{
-            print(error)
-        }
-    }
+
     func deleteRecords(product: Int,complation: @escaping (Result<Bool, Error>)->Void){
         guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
             complation(.failure(NSError(domain: "Appdelegate not found", code: 404, userInfo: nil)))

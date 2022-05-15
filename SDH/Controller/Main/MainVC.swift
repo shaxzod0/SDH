@@ -10,7 +10,7 @@ import UIKit
 class MainVC: BaseViewController {
     let viewModel = MainViewModel()
     let searchTF = UITextField()
-    let searchButton = UIButton()
+    let searchButton = RectButton(image: nil, title: "Search", frame: .zero)
     weak var collectionView: UICollectionView?
     
     override func viewDidLoad() {
@@ -28,20 +28,21 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, 
     private func initViews() {
         view.addSubview(searchTF)
         view.addSubview(searchButton)
+
+        searchButton.addTarget(self, action: #selector(searchMedicine), for: .touchUpInside)
+        searchButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(20)
+            make.centerY.equalTo(searchTF.snp.centerY)
+            make.width.equalToSuperview().multipliedBy(0.3)
+        }
         searchTF.placeholder = "Enter medicine"
         searchTF.layer.cornerRadius = 15
         searchTF.backgroundColor = .white
         searchTF.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.width.equalToSuperview().multipliedBy(0.6)
             make.height.equalTo(55)
             make.left.equalToSuperview().offset(15)
-        }
-        searchButton.setTitle("Search", for: .normal)
-        searchButton.addTarget(self, action: #selector(searchMedicine), for: .touchUpInside)
-        searchButton.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(20)
-            make.centerY.equalTo(searchTF.snp.centerY)
+            make.right.equalTo(searchButton.snp.left).inset(-10)
         }
         let medicinesLayout = UICollectionViewFlowLayout()
         medicinesLayout.minimumLineSpacing = 10

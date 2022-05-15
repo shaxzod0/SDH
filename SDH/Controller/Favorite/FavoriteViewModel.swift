@@ -14,7 +14,11 @@ struct CoreDataModel{
     let manafacturer: String
 }
 class FavoriteViewModel {
-    private var productData: [NSManagedObject] = []
+    private var productData: [NSManagedObject] = [] {
+        didSet {
+            self.reloadTableView?()
+        }
+    }
     init(){
         fetchProducts()
     }
@@ -52,4 +56,15 @@ class FavoriteViewModel {
             }
         }
     }
+    func deleteProduct(productId: Int) {
+        DataManager.shared.deleteRecords(product: productId) { res in
+            switch res{
+            case .success(_):
+                print("succes")
+            case.failure(let err):
+                print(err.localizedDescription)
+            }
+        }
+    }
+    var reloadTableView: (()->())?
 }

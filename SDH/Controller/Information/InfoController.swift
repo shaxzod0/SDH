@@ -87,5 +87,17 @@ extension InfoController {
         compositionInn.text = data.composition?.inn.name
         compositionPharmForm.text = data.composition?.pharm_form.name
         saveButton.initView(image: nil, title: viewModel.checkingAvailability())
+        saveButton.addTarget(self, action: #selector(saveData), for: .touchUpInside)
+    }
+    @objc func saveData() {
+        guard let data = viewModel.getMedicineData() else { return }
+        viewModel.dataManager.saveToFav(product: data) { res in
+            switch res{
+            case .success(_):
+                print("cart")
+            case .failure(let err):
+                print(err.localizedDescription)
+            }
+        }
     }
 }

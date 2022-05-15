@@ -11,18 +11,20 @@ class FavoriteController: UIViewController {
     let viewModel = FavoriteViewModel()
     let tableView = UITableView()
     let emptyLabel = UILabel()
-    
+    var isDelete = true
     override func viewDidLoad() {
         super.viewDidLoad()
         initView()
         view.backgroundColor = .lightGray
         emptyLabel.isHidden = !viewModel.isProductsEmpty()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.fetchProducts()
+    }
 }
 
 extension FavoriteController: UITableViewDelegate, UITableViewDataSource{
-
-    
     private func initView() {
         view.addSubview(emptyLabel)
         emptyLabel.text = "Not favorite products"
@@ -45,6 +47,11 @@ extension FavoriteController: UITableViewDelegate, UITableViewDataSource{
             make.bottom.equalToSuperview()
             make.left.right.equalToSuperview()
         }
+        viewModel.reloadTableView = { [weak self] () in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.getProductCount()
@@ -58,5 +65,17 @@ extension FavoriteController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = InfoModule.create(medicineId: viewModel.getProduct(index: indexPath.item).id)
         navigationController?.pushViewController(vc, animated: true)
+    }
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard editingStyle == .delete else { return }
+        let deleteObject = viewModel.getProduct(index: indexPath.item).id
+        if isDelete {
+            viewModel.deleteProduct(productId: deleteObject)
+            tableView.deleteRows(at: [indexPath] , with: .automatic)
+            tableView.reloadData()
+        }
     }
 }
