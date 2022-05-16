@@ -9,6 +9,7 @@ import UIKit
 
 class InfoViewModel {
     private var medicineId: Int
+    var isFav = true
     private var medicineModel: Results? {
         didSet {
             guard let _ = medicineModel else { return }
@@ -23,13 +24,11 @@ class InfoViewModel {
     func getMedicineData() -> Results? {
         return medicineModel
     }
-    
     init(repository: InformationRepository, manager: DataManager, medicineId: Int){
         self.repository = repository
         self.dataManager = manager
         self.medicineId = medicineId
     }
-    
     func getInfo(){
         repository.getInformation(id: medicineId) { res in
             self.medicineModel = res
@@ -37,26 +36,33 @@ class InfoViewModel {
     }
     func checkingAvailability() -> String{
         if dataManager.checkItemExist(id: medicineId){
+            isFav = true
             return "Delete"
         }else{
+            isFav = false
             return "Save"
         }
     }
-    @objc func saveData() {
+    func manageData() {
+        if isFav{
+            deleteData()
+        }else{
+            saveData()
+        }
+    }
+    func saveData() {
         dataManager.saveToFav(product: medicineModel!) { res in
             switch res{
-            case .success(_):
-                print("cart")
+            case .success(_): break
             case .failure(let err):
                 print(err.localizedDescription)
             }
         }
     }
-    @objc func deleteData() {
+    func deleteData() {
         dataManager.deleteRecords(product: medicineModel!.id) { res in
             switch res {
-            case .success(_):
-                print("deleted")
+            case .success(_): break
             case .failure(let err):
                 print(err.localizedDescription)
             }

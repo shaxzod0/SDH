@@ -14,7 +14,7 @@ struct CoreDataModel{
     let manafacturer: String
 }
 class FavoriteViewModel {
-    private var productData: [NSManagedObject] = [] {
+    var productData: [NSManagedObject] = [] {
         didSet {
             self.reloadTableView?()
         }

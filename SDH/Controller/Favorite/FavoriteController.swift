@@ -16,11 +16,12 @@ class FavoriteController: UIViewController {
         super.viewDidLoad()
         initView()
         view.backgroundColor = .lightGray
-        emptyLabel.isHidden = !viewModel.isProductsEmpty()
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.fetchProducts()
+        emptyLabel.isHidden = !viewModel.isProductsEmpty()
     }
 }
 
@@ -74,6 +75,7 @@ extension FavoriteController: UITableViewDelegate, UITableViewDataSource{
         let deleteObject = viewModel.getProduct(index: indexPath.item).id
         if isDelete {
             viewModel.deleteProduct(productId: deleteObject)
+            viewModel.productData.remove(at: indexPath.item)
             tableView.deleteRows(at: [indexPath] , with: .automatic)
             tableView.reloadData()
         }

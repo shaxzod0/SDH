@@ -12,16 +12,13 @@ class MainVC: BaseViewController {
     let searchTF = UITextField()
     let searchButton = RectButton(image: nil, title: "Search", frame: .zero)
     weak var collectionView: UICollectionView?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         initViews()
         isLoading = !viewModel.isProductsEmpty()
     }
     @objc override func retry() {
-        self.isLoading = true
-        self.noConnection = false
-        print("tapped")
+        viewModel.getItems()
     }
 }
 extension MainVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource{
@@ -36,7 +33,6 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, 
             make.width.equalToSuperview().multipliedBy(0.3)
         }
         searchTF.placeholder = "Enter medicine"
-        searchTF.layer.cornerRadius = 15
         searchTF.backgroundColor = .white
         searchTF.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide)
@@ -58,18 +54,18 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, 
             make.left.right.bottom.equalToSuperview()
         }
         self.collectionView = collectionView
-        viewModel.reloadCollectionViewClosure = { [weak self] () in
+        viewModel.reloadCollectionViewClosure = { [unowned self] () in
             DispatchQueue.main.async {
-                self?.collectionView?.reloadData()
+                self.isLoading = false
+                self.collectionView?.reloadData()
             }
         }
+        
+        view.bringSubviewToFront(noConnectionView)
     }
     @objc func searchMedicine() {
-        guard let name = searchTF.text else{ return }
+        guard let name = searchTF.text else { return }
         viewModel.searchedItems(medicineName: name)
-        if viewModel.getItemsCount() == 0 {
-            medicineNotFound()
-        }
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.getItemsCount()
@@ -92,10 +88,11 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, 
         navigationController?.pushViewController(vc, animated: true)
     }
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.item == viewModel.getItemsCount() - 1{
-            viewModel.pageCount += 1
+        
+        if indexPath.item == viewModel.getItemsCount() - 1 && !viewModel.getIsSearching(){
+            viewModel.increasePage()
             viewModel.getItems()
-        }else{
+        } else {
             
         }
     }
@@ -104,4 +101,7 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, 
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         present(alert, animated: true)
     }
+    
+    
+    
 }

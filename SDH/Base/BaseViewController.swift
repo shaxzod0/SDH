@@ -36,6 +36,7 @@ class BaseViewController: UIViewController {
             
         }
         reachability?.whenReachable = { reach in
+            self.retry()
             if reach.connection == .wifi {
                 self.noConnection = false
                 self.isLoading = true
@@ -99,10 +100,6 @@ class BaseViewController: UIViewController {
         noConnectionLabel.numberOfLines = 0
         noConnectionLabel.textAlignment = .center
         noConnectionView.addSubview(noConnectionLabel)
-        
-        let noConnectionButton: UIButton = RectButton(image: nil, title: "Retry", frame: .zero)
-        noConnectionButton.addTarget(self, action: #selector(retry), for: .touchUpInside)
-        noConnectionView.addSubview(noConnectionButton)
         noConnectionView.translatesAutoresizingMaskIntoConstraints = false
         noConnectionView.isHidden = true
         view.addSubview(noConnectionView)
@@ -119,11 +116,6 @@ class BaseViewController: UIViewController {
             make.left.right.equalToSuperview()
             make.top.equalTo(noConnectionImageView.snp.bottom)
         }
-        noConnectionButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(noConnectionLabel.snp.bottom).offset(10)
-        }
-        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -145,6 +137,6 @@ class BaseViewController: UIViewController {
         }
     }
     @objc func retry() {
-        
+        print("retried")
     }
 }

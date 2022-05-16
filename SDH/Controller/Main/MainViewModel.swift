@@ -9,9 +9,10 @@ import UIKit
 
 class MainViewModel {
   
-    var medicineItem: MedicineModel?
-    var pageCount = 1
-    var results: [Results] = [] {
+    private var medicineItem: MedicineModel?
+    private var pageCount = 1
+    private var isSearching = false
+    private var results: [Results] = [] {
         didSet{
             self.reloadCollectionViewClosure?()
         }
@@ -19,11 +20,21 @@ class MainViewModel {
     init() {
         getItems()
     }
-    func getItemsCount()->Int {
+    func getItemsCount() -> Int {
         return results.count
     }
     
+    func getIsSearching() -> Bool {
+        return isSearching
+    }
+    
+    
+    func increasePage() {
+        pageCount += 1
+    }
+    
     func getItems(){
+        isSearching = false
         Repository.shared.getMedicine(page: pageCount) { res in
             self.medicineItem = res
             if self.pageCount == 1 {
@@ -48,6 +59,7 @@ class MainViewModel {
         return results.isEmpty
     }
     func searchedItems(medicineName: String){
+        isSearching = true
         SearchRepository.shared.getInformation(medicineName: medicineName) { res in
             self.medicineItem = res
             self.results = res.results
